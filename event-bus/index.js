@@ -12,9 +12,13 @@ const COMMENT_MODERATION_SERVICE = "http://localhost:4003";
 const app = express();
 app.use(express.json());
 
+const events = [];
+
 app.post("/events", async (req, res) => {
     try {
         const event = req.body;
+        events.push(event);
+        
         console.log(`${APP_NAME} Received event ${event.type} data: ${JSON.stringify(event.data)}`);
         
         console.log(`${APP_NAME} Emitting event to Post Service`);
@@ -34,6 +38,11 @@ app.post("/events", async (req, res) => {
         console.log(`${APP_NAME} ${error}`);
         return res.status(500).json({ error: error.message });
     }
+});
+
+app.get('/events', (req, res) => {
+    console.log(`${APP_NAME} Received request to get all events`);
+    return res.json(events);
 });
 
 app.listen(APP_PORT, () => {

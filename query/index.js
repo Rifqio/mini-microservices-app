@@ -1,5 +1,6 @@
 const express = require('express');
 const cors = require('cors');
+const axios = require('axios').default;
 
 const app = express();
 app.use(express.json());
@@ -8,6 +9,7 @@ app.use(cors());
 const APP_PORT = 4002;
 const APP_NAME = '[Query-Service]'
 
+const EVENT_BUS_SERVICE = 'http://localhost:4005';
 const EVENT_TYPE = {
     POST_CREATED: 'PostCreated',
     COMMENT_CREATED: 'CommentCreated',
@@ -16,13 +18,7 @@ const EVENT_TYPE = {
 
 const posts = {};
 
-app.get('/posts', (req, res) => {
-    console.log(`${APP_NAME} Received request to get all posts`);
-    return res.json(posts);
-});
-
-app.post('/events', (req, res) => {
-    const { type, data } = req.body;
+const handleEvents = (type, data) => {
     console.log(`${APP_NAME} Received event ${type} data: ${JSON.stringify(data)}`);
 
     if (type === EVENT_TYPE.POST_CREATED) {
@@ -48,12 +44,32 @@ app.post('/events', (req, res) => {
         comment.status = status;
         comment.content = content;
     }
-
     console.log(`${APP_NAME} Updated posts: ${JSON.stringify(posts)}`);
+};
 
+app.get('/posts', (req, res) => {
+    console.log(`${APP_NAME} Received request to get all posts`);
+    return res.json(posts);
+});
+
+app.post('/events', (req, res) => {
+    const { type, data } = req.body;
+    handleEvents(type, data);
     return res.json({ status: 'OK' });
 });
 
-app.listen(APP_PORT, () => {
-    console.log(`${APP_NAME} listening on http://localhost:${APP_PORT} 🚀`);
+app.listen(APP_PORT, async () => {
+    try {
+        console.log(`${APP_NAME} listening on http://localhost:${APP_PORT} 🚀`);
+        console.log(`${APP_NAME} Fetching events from event-bus`);
+        const events = await axios.get(`${EVENT_BUS_SERVICE}/events`);
+
+        for (let event of events.data) {
+            console.log(`${APP_NAME} Processing event ${event.type}`);
+            handleEvents(event.type, event.data)
+        }
+    } catch (error) {
+        console.log(`${APP_NAME} ${error}`);
+        throw error;
+    }
 });
