@@ -2,13 +2,15 @@ const express = require("express");
 const cors = require("cors");
 const axios = require("axios").default;
 const { randomBytes } = require("crypto");
-
-const eventBusService = "http://localhost:4005";
-
-const appPort = 4001;
 const app = express();
+
 app.use(cors());
 app.use(express.json());
+
+const APP_PORT = 4001;
+const APP_NAME = "Comment-Service";
+
+const EVENT_BUS_SERVICE = "http://localhost:4005";
 
 const commentsByPostId = {};
 
@@ -29,10 +31,10 @@ app.post("/posts/:id/comments", async (req, res) => {
 
         commentsByPostId[id] = comments;
 
-        console.log(`[Comment-Service, AddComment] Comment created for post ${id}`);
+        console.log(`[${APP_NAME}, AddComment] Comment created for post ${id}`);
 
-        console.log(`[Comment-Service, AddComment] Emitting event to event-bus`);
-        await axios.post(`${eventBusService}/events`, {
+        console.log(`[${APP_NAME}, AddComment] Emitting event to event-bus`);
+        await axios.post(`${EVENT_BUS_SERVICE}/events`, {
             type: "CommentCreated",
             data: {
                 id: commentId,
@@ -42,15 +44,15 @@ app.post("/posts/:id/comments", async (req, res) => {
         });
         res.status(201).json(comments);
     } catch (error) {
-        console.log(`[Comment-Service, AddComment] ${error}`);
+        console.log(`[${APP_NAME}, AddComment] ${error}`);
     }
 });
 
 app.post('/events', (req, res) => {
-    console.log(`[Comment-Service, EventReceived] Received event ${req.body.type} data: ${JSON.stringify(req.body.data)}`);
+    console.log(`[${APP_NAME}, EventReceived] Received event ${req.body.type} data: ${JSON.stringify(req.body.data)}`);
     res.json({ status: "OK" });
 });
 
-app.listen(appPort, () => {
-    console.log(`[Comment-Service] listening on http://localhost:${appPort}`);
+app.listen(APP_PORT, () => {
+    console.log(`[${APP_NAME}] listening on http://localhost:${APP_PORT}`);
 });

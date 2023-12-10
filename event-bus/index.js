@@ -1,10 +1,12 @@
 const express = require("express");
 const axios = require("axios").default;
 
-const port = 4005;
-const postServiceUrl = "http://localhost:4000";
-const commentServiceUrl = "http://localhost:4001";
-const queryServiceUrl = "http://localhost:4002";
+const APP_PORT = 4005;
+const APP_NAME = "[Event-Bus]";
+
+const POST_SERVICE = "http://localhost:4000";
+const COMMENT_SERVICE = "http://localhost:4001";
+const QUERY_SERVICE = "http://localhost:4002";
 
 const app = express();
 
@@ -13,23 +15,23 @@ app.use(express.json());
 app.post("/events", async (req, res) => {
     try {
         const event = req.body;
-        console.log(`[Event-Bus] Received event ${event.type} data: ${JSON.stringify(event.data)}`);
+        console.log(`${APP_NAME} Received event ${event.type} data: ${JSON.stringify(event.data)}`);
         
-        console.log(`[Event-Bus] Emitting event to Post Service`);
-        await axios.post(`${postServiceUrl}/events`, event);
+        console.log(`${APP_NAME} Emitting event to Post Service`);
+        await axios.post(`${POST_SERVICE}/events`, event);
 
-        console.log(`[Event-Bus] Emitting event to Comment Service`);
-        await axios.post(`${commentServiceUrl}/events`, event);
+        console.log(`${APP_NAME} Emitting event to Comment Service`);
+        await axios.post(`${COMMENT_SERVICE}/events`, event);
 
-        console.log(`[Event-Bus] Emitting event to Query Service`);
-        await axios.post(`${queryServiceUrl}/events`, event);
+        console.log(`${APP_NAME} Emitting event to Query Service`);
+        await axios.post(`${QUERY_SERVICE}/events`, event);
 
         res.json({ status: "OK" });
     } catch (error) {
-        console.log(`[Event-Bus] ${error}`);
+        console.log(`${APP_NAME} ${error}`);
     }
 });
 
-app.listen(port, () => {
-    console.log(`[Event-Bus] listening on port http://localhost:${port} 🚀`);
+app.listen(APP_PORT, () => {
+    console.log(`${APP_NAME} listening on port http://localhost:${APP_PORT} 🚀`);
 });

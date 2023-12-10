@@ -1,14 +1,14 @@
 /* eslint-disable react/prop-types */
 import { useState } from "react";
 import axios from "axios";
-import { commentServiceUrl } from "./constant";
+import { COMMENT_SERVICE } from "./constant";
 
 function CommentCreate({ postId }) {
   const [content, setContent] = useState("");
 
   const onSubmit = async (e) => {
     e.preventDefault();
-    await axios.post(`${commentServiceUrl}/${postId}/comments`, {
+    await axios.post(`${COMMENT_SERVICE}/${postId}/comments`, {
       content,
     });
     setContent("");

@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
 import axios from "axios";
-import { postServiceUrl } from "./constant";
+import { QUERY_SERVICE_URL } from "./constant";
 import CommentCreate from "./CommentCreate";
 import CommentList from "./CommentList";
 
@@ -8,7 +8,7 @@ function PostLists() {
   const [posts, setPosts] = useState({});
 
   const fetchPost = async () => {
-    const res = await axios.get(`${postServiceUrl}/posts`);
+    const res = await axios.get(`${QUERY_SERVICE_URL}/posts`);
     setPosts(res.data);
   };
 
@@ -26,8 +26,8 @@ function PostLists() {
         <div className="card-body">
           <h3>{post.title}</h3>
         </div>
+        <CommentList comments={post.comments} />
         <CommentCreate postId={post.id} />
-        <CommentList postId={post.id} />
       </div>
     );
   });

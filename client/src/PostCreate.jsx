@@ -1,12 +1,12 @@
 import { useState } from "react";
 import axios from "axios";
-import { postServiceUrl } from "./constant";
+import { POST_SERVICE } from "./constant";
 
 function PostCreate() {
   const [title, setTitle] = useState("");
   const onSubmit = async (e) => {
     e.preventDefault();
-    await axios.post(`${postServiceUrl}/posts`, {
+    await axios.post(`${POST_SERVICE}/posts`, {
       title,
     });
     setTitle("");
