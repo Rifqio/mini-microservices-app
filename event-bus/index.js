@@ -7,9 +7,9 @@ const APP_NAME = "[Event-Bus]";
 const POST_SERVICE = "http://localhost:4000";
 const COMMENT_SERVICE = "http://localhost:4001";
 const QUERY_SERVICE = "http://localhost:4002";
+const COMMENT_MODERATION_SERVICE = "http://localhost:4003";
 
 const app = express();
-
 app.use(express.json());
 
 app.post("/events", async (req, res) => {
@@ -26,9 +26,13 @@ app.post("/events", async (req, res) => {
         console.log(`${APP_NAME} Emitting event to Query Service`);
         await axios.post(`${QUERY_SERVICE}/events`, event);
 
-        res.json({ status: "OK" });
+        console.log(`${APP_NAME} Emitting event to Comment Moderation Service`);
+        await axios.post(`${COMMENT_MODERATION_SERVICE}/events`, event);
+
+        return res.json({ status: "OK" });
     } catch (error) {
         console.log(`${APP_NAME} ${error}`);
+        return res.status(500).json({ error: error.message });
     }
 });
 

@@ -11,13 +11,14 @@ const APP_NAME = '[Query-Service]'
 const EVENT_TYPE = {
     POST_CREATED: 'PostCreated',
     COMMENT_CREATED: 'CommentCreated',
+    COMMENT_UPDATED: 'CommentUpdated',
 };
 
 const posts = {};
 
 app.get('/posts', (req, res) => {
     console.log(`${APP_NAME} Received request to get all posts`);
-    res.json(posts);
+    return res.json(posts);
 });
 
 app.post('/events', (req, res) => {
@@ -30,14 +31,27 @@ app.post('/events', (req, res) => {
     }
 
     if (type === EVENT_TYPE.COMMENT_CREATED) {
-        const { id, content, postId } = data;
+        const { id, content, postId, status } = data;
         const post = posts[postId];
-        post.comments.push({ id, content });
+        post.comments.push({ id, content, status });
+    }
+
+    if (type === EVENT_TYPE.COMMENT_UPDATED) {
+        const { id, content, postId, status } = data;
+
+        const post = posts[postId];
+        console.log(`${APP_NAME} Found post: ${JSON.stringify(post)}`);
+
+        const comment = post.comments.find(comment => comment.id === id);
+        console.log(`${APP_NAME} Found comment: ${JSON.stringify(comment)}`);
+
+        comment.status = status;
+        comment.content = content;
     }
 
     console.log(`${APP_NAME} Updated posts: ${JSON.stringify(posts)}`);
 
-    res.json({ status: 'OK' });
+    return res.json({ status: 'OK' });
 });
 
 app.listen(APP_PORT, () => {

@@ -14,7 +14,7 @@ app.use(express.json());
 const posts = {};
 
 app.get("/posts", (req, res) => {
-    res.json(posts);
+    return res.json(posts);
 });
 
 app.post("/posts", async (req, res) => {
@@ -41,12 +41,13 @@ app.post("/posts", async (req, res) => {
         res.status(201).json(posts[id]);
     } catch (error) {
         console.log(`[${APP_NAME}, AddPost] ${error}`);
+        return res.status(500).json({ error: error.message });
     }
 });
 
 app.post('/events', (req, res) => {
     console.log(`[${APP_NAME}, EventReceived] Received event ${req.body.type} data: ${JSON.stringify(req.body.data)}`);
-    res.json({ status: "OK" });
+    return res.json({ status: "OK" });
 });
 
 app.listen(APP_PORT, () => {
