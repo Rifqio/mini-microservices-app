@@ -11,6 +11,9 @@ const EVENT_BUS_SERVICE = "http://localhost:4005";
 app.use(cors());
 app.use(express.json());
 
+const EVENT_TYPE = {
+    POST_CREATED: "Post::Created",
+}
 const posts = {};
 
 app.get("/posts", (req, res) => {
@@ -31,7 +34,7 @@ app.post("/posts", async (req, res) => {
 
         console.log(`[${APP_NAME}, AddPost] Emitting event to event-bus`);
         await axios.post(`${EVENT_BUS_SERVICE}/events`, {
-            type: "PostCreated",
+            type: EVENT_TYPE.POST_CREATED,
             data: {
                 id,
                 title,

@@ -9,8 +9,8 @@ const APP_NAME = "CommentModeration-Service";
 
 const EVENT_BUS_SERVICE = "http://localhost:4005";
 const EVENT_TYPE = {
-    COMMENT_CREATED: "CommentCreated",
-    COMMENT_MODERATED: "CommentModerated",
+    COMMENT_CREATED: "Comment::Created",
+    COMMENT_MODERATED: "Comment::Moderated",
 };
 
 const COMMENT_STATUS = {

@@ -11,9 +11,9 @@ const APP_NAME = '[Query-Service]'
 
 const EVENT_BUS_SERVICE = 'http://localhost:4005';
 const EVENT_TYPE = {
-    POST_CREATED: 'PostCreated',
-    COMMENT_CREATED: 'CommentCreated',
-    COMMENT_UPDATED: 'CommentUpdated',
+    POST_CREATED: 'Post::Created',
+    COMMENT_CREATED: 'Comment::Created',
+    COMMENT_UPDATED: 'Comment::Updated',
 };
 
 const posts = {};
