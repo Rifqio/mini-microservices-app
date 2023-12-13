@@ -9,7 +9,7 @@ app.use(cors());
 const APP_PORT = 4002;
 const APP_NAME = '[Query-Service]'
 
-const EVENT_BUS_SERVICE = 'http://localhost:4005';
+const EVENT_BUS_SERVICE = 'http://eventbus-srv:4005';
 const EVENT_TYPE = {
     POST_CREATED: 'Post::Created',
     COMMENT_CREATED: 'Comment::Created',

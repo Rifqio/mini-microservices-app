@@ -4,10 +4,10 @@ const axios = require("axios").default;
 const APP_PORT = 4005;
 const APP_NAME = "[Event-Bus]";
 
-const POST_SERVICE = "http://localhost:4000";
-const COMMENT_SERVICE = "http://localhost:4001";
-const QUERY_SERVICE = "http://localhost:4002";
-const COMMENT_MODERATION_SERVICE = "http://localhost:4003";
+const POST_SERVICE = "http://posts-cluster-srv:4000";
+const COMMENT_SERVICE = "http://comment-cluster-srv:4001";
+const QUERY_SERVICE = "http://query-cluster-srv:4002";
+const COMMENT_MODERATION_SERVICE = "http://comment-moderation-cluster-srv:4003";
 
 const app = express();
 app.use(express.json());

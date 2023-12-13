@@ -7,7 +7,7 @@ app.use(express.json());
 const APP_PORT = 4003;
 const APP_NAME = "CommentModeration-Service";
 
-const EVENT_BUS_SERVICE = "http://localhost:4005";
+const EVENT_BUS_SERVICE = "http://eventbus-srv:4005";
 const EVENT_TYPE = {
     COMMENT_CREATED: "Comment::Created",
     COMMENT_MODERATED: "Comment::Moderated",

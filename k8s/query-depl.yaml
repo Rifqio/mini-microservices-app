@@ -1,0 +1,39 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: query-service
+spec:
+  replicas: 1
+  template:
+    metadata:
+      labels:
+        app: query-service
+    spec:
+      containers:
+        - name: query-service
+          image: rifqio/query-practice
+          resources:
+            limits:
+              cpu: "0.5"
+              memory: "512Mi"
+            requests:
+              cpu: "0.1"
+              memory: "256Mi"
+  selector:
+    matchLabels:
+      app: query-service
+
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: query-cluster-srv
+spec:
+  selector:
+    app: query-service
+  type: ClusterIP
+  ports:
+    - name: query-service
+      protocol: TCP
+      port: 4002
+      targetPort: 4002

@@ -6,7 +6,7 @@ const { randomBytes } = require("crypto");
 const app = express();
 const APP_PORT = 4000;
 const APP_NAME = "Post-Service";
-const EVENT_BUS_SERVICE = "http://localhost:4005";
+const EVENT_BUS_SERVICE = "http://eventbus-srv:4005";
 
 app.use(cors());
 app.use(express.json());
@@ -23,7 +23,7 @@ app.get("/posts", (req, res) => {
 app.post("/posts", async (req, res) => {
     try {
         const { title } = req.body;
-        const id = randomBytes(2).toString("hex");
+        const id = randomBytes(3).toString("hex");
 
         posts[id] = {
             id,

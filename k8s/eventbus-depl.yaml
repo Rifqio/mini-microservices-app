@@ -1,0 +1,39 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: eventbus-service
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: eventbus
+  template:
+    metadata:
+      labels:
+        app: eventbus
+    spec:
+      containers:
+        - name: eventbus
+          image: rifqio/eventbus-practice
+          resources:
+            limits:
+              cpu: "0.5"
+              memory: "512Mi"
+            requests:
+              cpu: "0.1"
+              memory: "256Mi"
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: eventbus-srv
+spec:
+  selector: 
+    app: eventbus
+  type: ClusterIP
+  ports:
+    - name: eventbus
+      protocol: TCP
+      port: 4005
+      targetPort: 4005
+
