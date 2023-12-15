@@ -16,11 +16,7 @@ const EVENT_TYPE = {
 }
 const posts = {};
 
-app.get("/posts", (req, res) => {
-    return res.json(posts);
-});
-
-app.post("/posts", async (req, res) => {
+app.post("/posts/create", async (req, res) => {
     try {
         const { title } = req.body;
         const id = randomBytes(3).toString("hex");
